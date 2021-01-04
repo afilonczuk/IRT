@@ -1,0 +1,113 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
+
+# Unidimensional Item Response Theory - 3PL model
+
+Here is the equation for estimating the probability of a respondent answering an item correctly given a subject's latent trait:
+
+$$P(X=1 | \theta) = c + \frac{1-c}{1+ e^{-a(\theta-b)}}$$
+
+where
+
+* *a* is the discrimination parameter
+* *b* is the difficulty parameter
+* *c* is the guessing parameter
+* *$\theta$* is the latent trait of the subject
+* *X* is the subject's response 
+
+To estimate the latent trait, obtain the likelihood function $L(X|\theta)$ where X is a vector of responses $x_1, x_2,..., x_n$ for *n* number of items:
+
+$$L(X|\theta) = L(x_1, x_2,..., x_n | \theta) = \prod_{i=1}^n P_i(\theta)^{x_i}(1-P_i(\theta))^{1-x_i}$$
+
+Take the natural logarithm of the likelihood function:
+
+$$\ln L(X|\theta) = \sum_{i=1}^n [x_i \ln P_i(\theta) + (1-x_i) \ln Q_i(\theta)]$$
+
+where $Q_i(\theta) = 1-P_i(\theta)$
+
+Set the derivative of the natural logarithm of the likelihood equal to 0:
+
+$$\frac{\partial}{\partial\theta} \ln L(X|\theta) = 0$$
+
+$$\frac{\partial}{\partial\theta} \ln L(X|\theta) = \sum_{i=1}^n [x_i \frac{ P'_i(\theta)}{P_i(\theta)} - (1-x_i) \frac{ P'_i(\theta)}{Q_i(\theta)} ] = \sum_{i=1}^n [(u_i - P_i(\theta))\frac{P'_i(\theta)}{P_i(\theta)Q_i(\theta)}]$$
+
+$$P'_i(\theta) = \frac{\partial P_i(\theta)}{\partial\theta} = \frac{a_iQ_i(\theta)[P_i(\theta) - c_i]}{1-c_i}$$
+
+$$\frac{\partial}{\partial\theta} \ln L(X|\theta) = \sum_{i=1}^n\frac{a_i(x_i-P_i(\theta))[P_i(\theta) - c_i]}{(1-c_i)P_i(\theta)}$$
+
+The second derivative, denoted H($\theta$):
+
+$$H(\theta) = \frac{\partial^2}{\partial\theta^2} \ln L(X|\theta) = \sum_{i=1}^n\frac{a_{i}^{2}Q_i(\theta)[x_ic_i-P_{i}^{2}(\theta)][P_i(\theta) - c_i]}{(1-c_i)^2P_i^2(\theta)}$$
+
+$$\delta^{(j)} = [H(\theta^{(j)})]^{-1} \times \frac{\partial}{\partial\theta}\ln L(x|\theta^{(j)})$$
+Use Newton's Method to estimate the value of *$\theta$* that maximizes $L(x|\theta)$, using *j* approximations and an initial value of $\theta^{(j)}$ close to the true maximum:
+
+$$\theta^{(j+1)} = \theta^{(j)} - \delta^{(j)}$$
+
+Approximate until $\delta^{(j)}$ becomes sufficiently small.
+
+
+
+
+# Multidimensional Item Response Theory
+
+Here is the equation for estimating the probability of a respondent answering an item correctly given a subject's latent trait:
+
+$$P(X=1 | \theta) = c + \frac{1-c}{1+ e^{-a(\theta-b)}}$$
+
+where
+
+* *a* is the discrimination parameter
+* *b* is the difficulty parameter
+* *c* is the guessing parameter
+* X is the subject's response 
+* *$\theta$* is the vector of *p* latent traits ${\hat{\theta}_1, \hat{\theta}_2, ... \hat{\theta}_p}$
+* *p* is the number of dimensions in the model
+
+To estimate the latent traits, obtain likelihood function $L(X|\theta)$ where X is a vector of responses $x_1, x_2,..., x_n$ for *n* number of items:
+
+$$L(X|\theta) = L(x_1, x_2,..., x_n | \theta) = \prod_{i=1}^n P_i(\theta)^{x_i}(1-P_i(\theta))^{1-x_i}$$
+
+Take the natural logarithm of the likelihood function:
+
+$$\ln L(X|\theta) = \sum_{i=1}^n [x_i \ln P_i(\theta) + (1-x_i) \ln Q_i(\theta)]$$
+
+where $Q_i(\theta) = 1-P_i(\theta)$
+
+Set the derivative of the natural logarithm of the likelihood equal to 0:
+
+$$\frac{\partial}{\partial\theta} \ln L(X|\theta) = 0$$
+$$\frac{\partial}{\partial\theta} \ln L(X|\theta) = 
+\mathbf{X} = \left[\begin{array}
+{c}
+\frac{\partial}{\partial\theta}_1 \ln L(X|\theta)\\
+\frac{\partial}{\partial\theta}_2 \ln L(X|\theta) \\
+.    \\.\\.\\
+\frac{\partial}{\partial\theta}_p \ln L(X|\theta)  
+\end{array}\right]$$
+
+Take the derivative of the log likelihood with respect to $\theta_k$ for *k* = 1, 2, ..., *p* traits: 
+
+$$\frac{\partial}{\partial\theta_k} \ln L(X|\theta) = \sum_{i=1}^n [x_i \frac{ P'_i(\theta)}{P_i(\theta)} - (1-x_i) \frac{ P'_i(\theta)}{Q_i(\theta)} ] = \sum_{i=1}^n [(u_i - P_i(\theta))\frac{P'_i(\theta)}{P_i(\theta)Q_i(\theta)}]$$
+
+$$P'_i(\theta) = \frac{\partial P_i(\theta)}{\partial\theta_k} = \frac{a_{ki}Q_i(\theta)[P_i(\theta) - c_i]}{1-c_i}$$
+
+$$\frac{\partial}{\partial\theta_k} \ln L(X|\theta) = \sum_{i=1}^n\frac{a_{ki}(x_i-P_i(\theta))[P_i(\theta) - c_i]}{(1-c_i)P_i(\theta)}$$
+
+The p$\times$p matrix of second derivatives, denoted H($\theta$), contains diagonal elements derived from the equation
+
+$$ \frac{\partial^2}{\partial\theta_k^2} \ln L(X|\theta) = \sum_{i=1}^n\frac{a_{ki}^{2}Q_i(\theta)[x_ic_i-P_{i}^{2}(\theta)][P_i(\theta) - c_i]}{(1-c_i)^2P_i^2(\theta)}$$
+
+and off-diagonal elements derived from the equation
+
+$$ \frac{\partial^2}{\partial\theta_k \partial\theta_l} \ln L(X|\theta) = \sum_{i=1}^n\frac{a_{ki}a_{li}Q_i(\theta)[x_ic_i-P_{i}^{2}(\theta)][P_i(\theta) - c_i]}{(1-c_i)^2P_i^2(\theta)}$$
+$\delta^{(j)}$ is the p $\times$ 1 vector used to find an approximation of $\theta$ with a higher likelihood than a previously estimated theta ($\theta^{(j)}$)
+$$\delta^{(j)} = [H(\theta^{(j)})]^{-1} \times \frac{\partial}{\partial\theta}\ln L(x|\theta^{(j)})$$
+Use Newton's Method to estimate the value of *$\theta$* that maximizes $L(x|\theta)$, using *j* iterations and an initial value of $\theta^{(j)}$ close to the true maximum:
+
+$$\theta^{(j+1)} = \theta^{(j)} - \delta^{(j)}$$
+
+Approximate until $\delta^{(j)}$ becomes sufficiently small.
